@@ -1,0 +1,50 @@
+{
+  "name": "perafly",
+  "version": "0.9.0",
+  "description": "Publish a folder to a live URL with Perafly, and connect agents to it.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "private": true,
+  "bin": {
+    "perafly": "dist/cli.js",
+    "pf": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "skills",
+    "plugins",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:binary": "node scripts/build-binary.mjs",
+    "checksums": "node scripts/checksums.mjs",
+    "homebrew:formula": "node scripts/homebrew-formula.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "commander": "^14.0.3",
+    "ignore": "^7.0.5",
+    "tar": "^7.4.3",
+    "yauzl": "^3.2.0",
+    "zod": "^3.25.76"
+  },
+  "optionalDependencies": {
+    "@napi-rs/keyring": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/yauzl": "^2.10.3",
+    "postject": "1.0.0-alpha.6",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0"
+  }
+}

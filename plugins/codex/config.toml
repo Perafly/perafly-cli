@@ -1,0 +1,4 @@
+# Add to ~/.codex/config.toml, or run: perafly setup agent --agent codex
+[mcp_servers.perafly]
+command = "npx"
+args = ["-y", "perafly", "mcp"]

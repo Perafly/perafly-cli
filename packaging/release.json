@@ -1,0 +1,5 @@
+{
+    "$comment": "Yayın yapılandırmasının tek kaynağı (README §8). GitHub örgütü henüz karar değil: değişirse yalnız burası ve packaging/install.sh, install.ps1 içindeki varsayılan depo satırı değişir (test/release.test.ts eşliği denetler).",
+    "repository": "perafly/perafly-cli",
+    "tap": "perafly/homebrew-tap"
+}

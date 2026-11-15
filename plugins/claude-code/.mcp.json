@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "perafly": { "command": "npx", "args": ["-y", "perafly", "mcp"] }
+  }
+}

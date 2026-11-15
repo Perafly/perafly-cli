@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://perafly.com/schemas/perafly.json",
+  "title": "perafly.jsonc",
+  "description": "Perafly project configuration. Build and framework detection belong to Vercel; this file only overrides them. It never holds the project id: the folder link is .perafly/project.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rootDirectory": { "type": ["string", "null"], "minLength": 1 },
+        "installCommand": { "type": ["string", "null"], "minLength": 1 },
+        "buildCommand": { "type": ["string", "null"], "minLength": 1 },
+        "outputDirectory": { "type": ["string", "null"], "minLength": 1 },
+        "framework": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "redirects": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "destination"],
+        "properties": {
+          "source": { "type": "string", "minLength": 1 },
+          "destination": { "type": "string", "minLength": 1 },
+          "permanent": { "type": "boolean" },
+          "statusCode": { "enum": [301, 302, 307, 308] }
+        }
+      }
+    },
+    "rewrites": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "destination"],
+        "properties": { "source": { "type": "string", "minLength": 1 }, "destination": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "headers": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "headers"],
+        "properties": {
+          "source": { "type": "string", "minLength": 1 },
+          "headers": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["key", "value"],
+              "properties": { "key": { "type": "string", "minLength": 1, "maxLength": 256 }, "value": { "type": "string", "maxLength": 4096 } }
+            }
+          }
+        }
+      }
+    },
+    "crons": {
+      "type": "array",
+      "maxItems": 40,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "schedule"],
+        "properties": { "path": { "type": "string", "pattern": "^/" }, "schedule": { "type": "string", "pattern": "^\\S+(\\s+\\S+){4}$" } }
+      }
+    },
+    "access": { "enum": ["private", "public"] }
+  }
+}

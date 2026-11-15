@@ -1,0 +1,12 @@
+node_modules/
+dist/
+# Tek dosya ikililer ve SHA256SUMS (npm run build:binary, checksums; README §8)
+dist-bin/
+*.tgz
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# CLI'ın kendi yerel durumu: hesapsız proje anahtarı burada durur, asla işlenmez
+.perafly/state.json

@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Typecheck, test, build (Node ${{ matrix.node }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        # En düşük desteklenen (README §8) ve ikiliye gömülen sürüm (release.yml BINARY_NODE_VERSION)
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  binary:
+    name: Binary smoke test (linux-x64)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build:binary -- --expect-target linux-x64
+      - name: Smoke test
+        run: |
+          test "$(./dist-bin/perafly-linux-x64 --version)" = "$(node -p "require('./package.json').version")"
+          ./dist-bin/perafly-linux-x64 --help > /dev/null
+          PERAFLY_HOME="$RUNNER_TEMP/perafly-home" ./dist-bin/perafly-linux-x64 profiles --json
+      - name: Shellcheck install.sh
+        run: shellcheck -s sh packaging/install.sh
